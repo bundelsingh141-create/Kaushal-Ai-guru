@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kaushal AI Guru 🤖</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+<!-- 🔥 SIDEBAR -->
+<div class="sidebar">
+    <h2>🤖 Kaushal AI</h2>
+
+    <button onclick="newChat()">➕ New Chat</button>
+    <button onclick="clearChat()">🗑 Clear</button>
+    <button onclick="saveChat()">💾 Save</button>
+
+    <div id="history"></div>
+</div>
+
+<!-- 🔥 MAIN CHAT -->
+<div class="main">
+
+    <!-- 💬 CHAT BOX -->
+    <div id="chat-box"></div>
+
+    <!-- 🔥 INPUT BAR -->
+    <div class="input-bar">
+        <input id="input" type="text" placeholder="Ask anything... (project ideas, steps, AI 🤖)" autocomplete="off">
+
+        <button onclick="startMic()">🎤</button>
+        <button onclick="sendMessage()">➤</button>
+    </div>
+
+</div>
+
+<!-- 🔥 SCRIPT -->
+<script src="/static/script.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,202 @@
+/* 🔥 GLOBAL */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #0f172a, #020617);
+    color: white;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* APP LAYOUT */
+.app {
+    display: flex;
+    height: 100vh;
+}
+
+/* 🔥 SIDEBAR */
+.sidebar {
+    width: 260px;
+    background: rgba(2, 6, 23, 0.85);
+    backdrop-filter: blur(15px);
+    padding: 20px;
+    border-right: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+/* BUTTONS */
+.sidebar button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    background: #1e293b;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.sidebar button:hover {
+    background: #2563eb;
+    transform: scale(1.05);
+}
+
+/* HISTORY */
+#history {
+    margin-top: 20px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.history-item {
+    padding: 10px;
+    background: #1e293b;
+    margin-top: 6px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.history-item:hover {
+    background: #334155;
+    transform: translateX(5px);
+}
+
+/* 🔥 MAIN */
+.main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* CHAT BOX */
+#chat-box {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+}
+
+/* SCROLLBAR */
+#chat-box::-webkit-scrollbar {
+    width: 6px;
+}
+#chat-box::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 10px;
+}
+
+/* 🔥 MESSAGE */
+.message {
+    max-width: 75%;
+    padding: 14px;
+    margin: 10px 0;
+    border-radius: 16px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    animation: fadeIn 0.3s ease;
+}
+
+/* USER */
+.user {
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    margin-left: auto;
+    box-shadow: 0 0 15px rgba(59,130,246,0.4);
+}
+
+/* BOT */
+.bot {
+    background: rgba(30, 41, 59, 0.8);
+    margin-right: auto;
+    box-shadow: 0 0 15px rgba(56,189,248,0.4);
+    backdrop-filter: blur(8px);
+}
+
+/* 🔥 INPUT BAR */
+.input-bar {
+    display: flex;
+    padding: 12px;
+    background: rgba(2, 6, 23, 0.9);
+    border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+/* INPUT */
+.input-bar input {
+    flex: 1;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    outline: none;
+    background: #1e293b;
+    color: white;
+    font-size: 14px;
+}
+
+/* BUTTONS */
+.input-bar button {
+    margin-left: 8px;
+    padding: 12px 14px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.input-bar button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 10px #3b82f6;
+}
+
+/* 🎤 MIC BUTTON SPECIAL */
+.input-bar button:nth-child(2) {
+    background: linear-gradient(135deg, #10b981, #22c55e);
+}
+
+/* 🔥 ANIMATION */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 🔥 THINKING DOTS */
+.dot {
+    animation: blink 1.5s infinite;
+}
+.dot:nth-child(2) { animation-delay: 0.2s; }
+.dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes blink {
+    0% {opacity: 0}
+    50% {opacity: 1}
+    100% {opacity: 0}
+}
+
+/* 🔥 MOBILE RESPONSIVE */
+@media (max-width: 768px) {
+    .sidebar {
+        display: none;
+    }
+
+    .message {
+        max-width: 90%;
+    }
+
+    .input-bar input {
+        font-size: 16px;
+    }
+}
