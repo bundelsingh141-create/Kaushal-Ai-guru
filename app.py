@@ -1,11 +1,12 @@
 from flask import Flask, render_template, request, jsonify
 from groq import Groq
+import os
 import random
 
 app = Flask(__name__)
 
 # ================= API SETUP =================
-client = Groq(api_key="Groq Api Key")
+client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 
 # ================= MEMORY =================
 chat_memory = {}
@@ -50,7 +51,20 @@ def update_memory(user_id, msg):
         users[user_id]["interest"] = msg
 
 
-# ================= RESPONSE SYSTEM =================
+# ================= AI RESPONSE =================
+def generate_ai(prompt, messages=None):
+    try:
+        response = client.chat.completions.create(
+            model="llama-3.1-8b-instant",
+            messages=messages if messages else [{"role": "system", "content": prompt}]
+        )
+        return response.choices[0].message.content
+    except Exception as e:
+        print("AI ERROR:", e)
+        return "⚠️ AI error aa gaya, thodi der baad try karo"
+
+
+# ================= MAIN RESPONSE =================
 def generate_response(user_id, user_message):
 
     update_memory(user_id, user_message)
@@ -65,7 +79,7 @@ def generate_response(user_id, user_message):
     # 🎯 GUIDE MODE
     guide_mode = "steps" in msg or "kaise" in msg
 
-    # 🎯 CATEGORY
+    # 🎯 CATEGORY DETECTION
     category = None
     if "science" in msg:
         category = "science"
@@ -94,7 +108,7 @@ def generate_response(user_id, user_message):
         idea = random.choice(available)
         used_ideas[user_id].append(idea["name"])
 
-        system_prompt = f"""
+        prompt = f"""
 You are AI Kaushal Guru 🤖
 
 User:
@@ -115,7 +129,7 @@ Interest: {users[user_id]['interest']}
 """
 
         if guide_mode:
-            system_prompt += """
+            prompt += """
 
 👉 Steps to Build:
 1. Step-by-step explain karo
@@ -129,19 +143,11 @@ Easy hacks do
 Kya output milega
 """
 
-        response = client.chat.completions.create(
-            model="llama-3.1-8b-instant",
-            messages=[{"role": "system", "content": system_prompt}]
-        )
+        reply = generate_ai(prompt)
 
-        reply = response.choices[0].message.content
-
-        chat_memory[user_id].append({"role": "assistant", "content": reply})
-
-        return reply
-
-    # ================= NORMAL CHAT =================
-    system_prompt = f"""
+    else:
+        # ================= NORMAL CHAT =================
+        prompt = f"""
 You are AI Kaushal Guru 🤖
 
 User:
@@ -155,12 +161,10 @@ Rules:
 - Short and clear answer
 """
 
-    response = client.chat.completions.create(
-        model="llama-3.1-8b-instant",
-        messages=[{"role": "system", "content": system_prompt}] + chat_memory[user_id][-5:]
-    )
-
-    reply = response.choices[0].message.content
+        reply = generate_ai(
+            prompt,
+            [{"role": "system", "content": prompt}] + chat_memory[user_id][-5:]
+        )
 
     chat_memory[user_id].append({"role": "assistant", "content": reply})
 
@@ -170,7 +174,11 @@ Rules:
 # ================= ROUTES =================
 @app.route("/")
 def home():
-    return render_template("index.html")
+    try:
+        return render_template("index.html")
+    except Exception as e:
+        return f"Template error: {str(e)}"
+
 
 @app.route("/chat", methods=["POST"])
 def chat():
@@ -182,13 +190,12 @@ def chat():
         if not msg:
             return "⚠️ No message received"
 
-        reply = generate_response(user_id, msg)
-
-        return reply
+        return generate_response(user_id, msg)
 
     except Exception as e:
         print("ERROR:", e)
         return "⚠️ Server error aa gaya"
+
 
 # ================= ADMIN =================
 @app.route("/admin")
@@ -201,10 +208,11 @@ def admin():
         "used_ideas": used_ideas
     })
 
+
 # ================= RUN =================
 if __name__ == "__main__":
     print("🚀 Kaushal AI Guru Started")
     print("👨‍💻 Made by ADITYA AHIRWAR")
     print("🎓 Guided by AMIT SIR")
 
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5000)
