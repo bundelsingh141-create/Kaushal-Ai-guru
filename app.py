@@ -174,11 +174,21 @@ def home():
 
 @app.route("/chat", methods=["POST"])
 def chat():
-    data = request.json
-    user_id = data.get("user_id", "user1")
-    msg = data.get("message")
+    try:
+        data = request.json
+        user_id = data.get("user_id", "user1")
+        msg = data.get("message")
 
-    return generate_response(user_id, msg)
+        if not msg:
+            return "⚠️ No message received"
+
+        reply = generate_response(user_id, msg)
+
+        return reply
+
+    except Exception as e:
+        print("ERROR:", e)
+        return "⚠️ Server error aa gaya"
 
 # ================= ADMIN =================
 @app.route("/admin")
